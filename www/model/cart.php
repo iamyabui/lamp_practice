@@ -27,7 +27,7 @@ function get_user_carts($db, $user_id){
   return fetch_all_query($db, $sql, $params);
 }
 
-function get_user_cart($db, $user_id, $item_id){
+function get_user_cart($db, $item_id, $user_id){
   $sql = "
     SELECT
       items.item_id,
@@ -59,7 +59,7 @@ function get_user_cart($db, $user_id, $item_id){
 function add_cart($db, $item_id, $user_id) {
   $cart = get_user_cart($db, $item_id, $user_id);
   if($cart === false){
-    return insert_cart($db, $user_id, $item_id);
+    return insert_cart($db, $item_id, $user_id);
   }
   return update_cart_amount($db, $cart['cart_id'], $cart['amount'] + 1);
 }

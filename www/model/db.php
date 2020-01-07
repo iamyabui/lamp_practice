@@ -22,7 +22,7 @@ function fetch_query($db, $sql, $params = array()){
     $statement->execute($params);
     return $statement->fetch();
   }catch(PDOException $e){
-    set_error('データ取得に失敗しました。');
+    set_error('データ取得に失敗しました。'. $e->getMessage() );
   }
   return false;
 }
