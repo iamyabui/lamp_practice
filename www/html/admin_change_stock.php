@@ -5,6 +5,12 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 
 session_start();
+$token = get_post('token');
+
+if(is_valid_csrf_token($token) === false){
+  set_error('不正なアクセスです。');
+  redirect_to(HOME_URL);
+}
 
 if(is_logined() === false){
   redirect_to(LOGIN_URL);

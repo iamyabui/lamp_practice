@@ -5,6 +5,7 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 
 session_start();
+$token = get_csrf_token();
 
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
@@ -20,4 +21,5 @@ if(is_admin($user) === false){
 
 $items = get_all_items($db);
 
+header('X-FRAME-OPTIONS: DENY');
 include_once '../view/admin_view.php';

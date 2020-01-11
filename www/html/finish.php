@@ -6,6 +6,7 @@ require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
 
 session_start();
+$token = get_csrf_token();
 
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
@@ -23,4 +24,5 @@ if(purchase_carts($db, $carts) === false){
 
 $total_price = sum_carts($carts);
 
+header('X-FRAME-OPTIONS: DENY');
 include_once '../view/finish_view.php';
