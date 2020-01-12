@@ -6,6 +6,16 @@ require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
 
 session_start();
+//１，tokenの照合
+$token_post = get_post('token');
+
+if(is_valid_csrf_token($token_post) === false){
+  set_error('不正なアクセスです。');
+  redirect_to(HOME_URL);
+}
+
+//２，再度新しいトークンを書き換え
+$token = get_csrf_token();
 
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
@@ -23,4 +33,5 @@ if(purchase_carts($db, $carts) === false){
 
 $total_price = sum_carts($carts);
 
+header('X-FRAME-OPTIONS: DENY');
 include_once '../view/finish_view.php';
