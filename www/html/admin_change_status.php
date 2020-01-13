@@ -27,6 +27,7 @@ if(is_admin($user) === false){
 $item_id = get_post('item_id');
 $changes_to = get_post('changes_to');
 
+// 商品表示ステータスの変更、admin_view.phpからpostされた値がopenもしくはclose以外の場合エラーメッセージ出力
 if($changes_to === 'open'){
   update_item_status($db, $item_id, ITEM_STATUS_OPEN);
   set_message('ステータスを変更しました。');

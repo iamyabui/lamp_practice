@@ -25,13 +25,14 @@ $db = get_db_connect();
 $user = get_login_user($db);
 
 $carts = get_user_carts($db, $user['user_id']);
-
+// 在庫からカート内商品購入数を引いて、itemsテーブルの在庫数を更新
 if(purchase_carts($db, $carts) === false){
   set_error('商品が購入できませんでした。');
   redirect_to(CART_URL);
 } 
-
+// カート内の合計金額を取得
 $total_price = sum_carts($carts);
 
 header('X-FRAME-OPTIONS: DENY');
+// finish_view.phpに一度だけ飛ぶ
 include_once '../view/finish_view.php';

@@ -83,19 +83,25 @@
               <form method="post" action="admin_change_status.php" class="operation">
                 <?php if(is_open($item) === true){ ?>
                   <input type="submit" value="公開 → 非公開" class="btn btn-secondary">
+                  <!-- "公開 → 非公開"ボタンを押下すると、admin_change_status.phpの$changes_toにcloseが渡される-->
                   <input type="hidden" name="changes_to" value="close">
+                  <!-- "公開 → 非公開"ボタンを押下すると、admin_change_status.phpの$tokenにview.phpで取得したトークンが渡される-->
                   <input type="hidden" name="token" value="<?php print(h($token)); ?>">
                 <?php } else { ?>
                   <input type="submit" value="非公開 → 公開" class="btn btn-secondary">
+                  <!-- "非公開 → 公開"ボタンを押下すると、admin_change_status.phpの$changes_toにopenが渡される-->
                   <input type="hidden" name="changes_to" value="open">
+                  <!-- "非公開 → 公開"ボタンを押下すると、admin_change_status.phpの$tokenにview.phpで取得したトークンが渡される-->
                   <input type="hidden" name="token" value="<?php print(h($token)); ?>">
                 <?php } ?>
+                <!-- admin_change_status.phpの$item_idにitem_idが渡される -->
                 <input type="hidden" name="item_id" value="<?php print(h($item['item_id'])); ?>">
                 <input type="hidden" name="token" value="<?php print(h($token)); ?>">
               </form>
 
               <form method="post" action="admin_delete_item.php">
                 <input type="submit" value="削除" class="btn btn-danger delete">
+                 <!-- admin_delete_item.phpの$item_idにitem_idが渡される -->
                 <input type="hidden" name="item_id" value="<?php print(h($item['item_id'])); ?>">
                 <input type="hidden" name="token" value="<?php print(h($token)); ?>">
               </form>
