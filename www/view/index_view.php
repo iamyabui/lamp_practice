@@ -12,10 +12,12 @@
 
   <div class="container">
     <h1>商品一覧</h1>
+    <!-- messages.phpを実行、 エラーメッセージの表示-->
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
 
     <div class="card-deck">
       <div class="row">
+        <!-- 表示OKの商品全てについて実施 -->
       <?php foreach($items as $item){ ?>
         <div class="col-6 item">
           <div class="card h-100 text-center">
@@ -26,12 +28,14 @@
               <img class="card-img" src="<?php print(h(IMAGE_PATH . $item['image'])); ?>">
               <figcaption>
                 <?php print(h(number_format($item['price']))); ?>円
+                <!-- 在庫がある場合、カート追加ボタンを表示、postでindex_add_cart.phpに、item_idとtokenを渡す -->
                 <?php if($item['stock'] > 0){ ?>
                   <form action="index_add_cart.php" method="post">
                     <input type="submit" value="カートに追加" class="btn btn-primary btn-block">
                     <input type="hidden" name="item_id" value="<?php print(h($item['item_id'])); ?>">
                     <input type="hidden" name="token" value="<?php print(h($token)); ?>">
                   </form>
+                  <!-- 在庫がない場合、ボタンの表示はされずカートに追加できない。 -->
                 <?php } else { ?>
                   <p class="text-danger">現在売り切れです。</p>
                 <?php } ?>

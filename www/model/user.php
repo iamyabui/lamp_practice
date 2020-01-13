@@ -2,6 +2,7 @@
 require_once 'functions.php';
 require_once 'db.php';
 
+// 該当ユーザIDのユーザ情報を取得
 function get_user($db, $user_id){
   $sql = "
     SELECT
@@ -19,7 +20,7 @@ function get_user($db, $user_id){
   $params = array(':user_id' => $user_id);
   return fetch_query($db, $sql, $params);
 }
-
+// 該当ユーザのユーザ情報を取得
 function get_user_by_name($db, $name){
   $sql = "
     SELECT
@@ -37,41 +38,48 @@ function get_user_by_name($db, $name){
   $params = array(':name' => $name);
   return fetch_query($db, $sql, $params);
 }
-
+// ログイン成功後、セッションにuser_idを保存
 function login_as($db, $name, $password){
+  // ユーザ情報を取得
   $user = get_user_by_name($db, $name);
+  // ユーザ情報の取得失敗もしくは、パスワードが入力されたパスワードと一致しない場合、falseを返す
   if($user === false || $user['password'] !== $password){
     return false;
   }
+  // セッションにuser_idを保存する
   set_session('user_id', $user['user_id']);
   return $user;
 }
 
-function get_login_user($db){
-  $login_user_id = get_session('user_id');
 
+function get_login_user($db){
+  // セッションに保存されたuser_idを$login_user_idに渡す
+  $login_user_id = get_session('user_id');
+  // ログインユーザのユーザ情報を返す
   return get_user($db, $login_user_id);
 }
 
+// ユーザ名とパスワードがバリデーションチェックがOKの場合、usersテーブルに新規ユーザ情報を登録
 function regist_user($db, $name, $password, $password_confirmation) {
+  // ユーザ名とパスワードのバリデーションチェックがOKの場合はtrue、どちらか一つでもNGの場合はfalseを返す
   if( is_valid_user($name, $password, $password_confirmation) === false){
     return false;
   }
-  
   return insert_user($db, $name, $password);
 }
 
+// 該当のユーザについてAdminである場合TRUEを返す、Admin出ない場合False
 function is_admin($user){
   return $user['type'] === USER_TYPE_ADMIN;
 }
-
+// ユーザ名とパスワードのバリデーションチェックがOKの場合はtrue、どちらか一つでもNGの場合はfalseを返す
 function is_valid_user($name, $password, $password_confirmation){
   // 短絡評価を避けるため一旦代入。
   $is_valid_user_name = is_valid_user_name($name);
   $is_valid_password = is_valid_password($password, $password_confirmation);
   return $is_valid_user_name && $is_valid_password ;
 }
-
+// ユーザ名のバリデーションチェック
 function is_valid_user_name($name) {
   $is_valid = true;
   if(is_valid_length($name, USER_NAME_LENGTH_MIN, USER_NAME_LENGTH_MAX) === false){
@@ -84,7 +92,7 @@ function is_valid_user_name($name) {
   }
   return $is_valid;
 }
-
+// passwordのバリデーションチェック
 function is_valid_password($password, $password_confirmation){
   $is_valid = true;
   if(is_valid_length($password, USER_PASSWORD_LENGTH_MIN, USER_PASSWORD_LENGTH_MAX) === false){
@@ -101,7 +109,7 @@ function is_valid_password($password, $password_confirmation){
   }
   return $is_valid;
 }
-
+// usersテーブルに新規ユーザ情報を登録
 function insert_user($db, $name, $password){
   $sql = "
     INSERT INTO

@@ -26,7 +26,7 @@ if(is_admin($user) === false){
 
 $item_id = get_post('item_id');
 
-
+// 選択した商品の削除と画像ファイルの削除を実施
 if(destroy_item($db, $item_id) === true){
   set_message('商品を削除しました。');
 } else {
