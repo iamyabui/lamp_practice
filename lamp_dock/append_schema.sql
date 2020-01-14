@@ -6,7 +6,7 @@ CREATE TABLE `sample`.`orders` (
      PRIMARY KEY (`order_id`)
      ) ENGINE = InnoDB;
 
-CREATE TABLE `sample`.`orders` ( 
+CREATE TABLE `sample`.`details` ( 
     `detail_id` INT NOT NULL AUTO_INCREMENT , 
     `order_id` INT NOT NULL , 
     `item_id` INT NOT NULL , 
