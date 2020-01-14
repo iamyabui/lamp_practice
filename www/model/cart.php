@@ -186,3 +186,45 @@ function validate_cart_purchase($carts){
   return true;
 }
 
+
+// ordersテーブルに新しい購入明細を追加
+function insert_order($db, $user_id){
+  $sql = "
+    INSERT INTO
+      orders(
+          user_id
+      )
+    VALUES(:user_id)
+    ";
+
+    $params = array(':user_id' => $user_id);
+    return execute_query($db, $sql, $params);
+}
+
+// ？？detailsテーブルに入れるorder_idを取得したいが、取得方法がわからない
+function get_order_id($db){
+  $sql = "
+    SELECT
+      order_id
+    FROM
+      order
+    ";
+    return execute_query($db, $sql);
+}
+
+// detailsテーブルに新しい購入明細を追加
+function insert_detail($db, $order_id, $item_id, $amount, $price_bought){
+  $sql = "
+    INSERT INTO
+      details(
+          order_id,
+          item_id,
+          amount,
+          price_bought
+      )
+    VALUES(:order_id, :item_id, :amount, :price_bougt)
+    ";
+
+    $params = array(':order_id' => $order_id, ':item_id' => $item_id, ':amount' => $amount, ':price_bougt' => $price_bought);
+    return execute_query($db, $sql, $params);
+}

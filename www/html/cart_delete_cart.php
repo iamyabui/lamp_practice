@@ -30,6 +30,16 @@ $user = get_login_user($db);
 
 // cart_view.phpでpostしたcart_idを取得
 $cart_id = get_post('cart_id');
+// ログインユーザのカート情報を渡す
+$carts = get_user_carts($db, $user['user_id']);
+// ログインユーザのカート内合計金額を計算
+$total_price = sum_carts($carts);
+// ordersテーブルにカラムを追加
+insert_order($db, $user['user_id']);
+// ordersテーブルで追加されたorder_idを取得
+$order_id = get_order_id($db);
+// detailsテーブルにカラムを追加
+insert_detail($db, $order_id, $carts['item_id'], $carts['amount'], $carts['price']);
 
 // cart_view.phpでpostしたcart_idに対して行ごと削除
 if(delete_cart($db, $cart_id)){
