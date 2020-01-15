@@ -1,6 +1,6 @@
 <?php
 
-//ルートパス(MyDocker/lamp_practice/www/)から相対パスで、代入したいパスを指定
+//ルートパス(var/www/html)から相対パスで、代入したいパスを指定
 //MODEL_PATHに、modalフォルダのパスを代入
 define('MODEL_PATH', $_SERVER['DOCUMENT_ROOT'] . '/../model/');
 //VIEW_PATHに、viewフォルダのパスを代入

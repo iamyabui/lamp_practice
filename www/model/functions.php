@@ -41,7 +41,7 @@ function get_session($name){
   return '';
 }
 
-// 指定されたカラムに、値を代入してセッションにわたす??
+// 指定されたキーに、値を代入してセッションにわたす
 function set_session($name, $value){
   $_SESSION[$name] = $value;
 }
@@ -52,17 +52,18 @@ function set_error($error){
 }
 
 function get_errors(){
-  // セッションに渡された'__errors'カラムの値（エラーメッセージ）を$errorsに代入（空の場合は空文字を代入）
+  // セッションに渡された'__errors'カラムの値（エラーメッセージ）を配列で$errorsに代入（空の場合は空文字を代入）
   $errors = get_session('__errors');
 
-  // セッションに渡された'__errors'カラムの値が空の場合、空の配列を渡す??
+  // セッションに渡された'__errors'カラムの値が空の場合、空の配列を渡す
+  // ⇛foreachに渡した場合エラーとなるのを防ぐため
   if($errors === ''){
     return array();
   }
 
-  // ＄_SESSION['__errors']に配列を渡す??
+  // ＄_SESSION['__errors']に空配列を渡して、リセットする
   set_session('__errors',  array());
-  // 
+  // get_sessionにてs新規で追加されたerrorメッセージを返す
   return $errors;
 }
 
