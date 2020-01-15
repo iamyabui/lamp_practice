@@ -121,3 +121,67 @@ function insert_user($db, $name, $password){
   return execute_query($db, $sql, $params);
 }
 
+// 履歴画面、明細画面にデータをテーブルに挿入
+function regist_order_transaction($db, $user_id, $carts){
+  
+  // トランザクション開始
+  $db->beginTransaction();
+  // カートで購入した内容をordersテーブルとdetailsテーブルに挿入、成功したらtrueを返す
+  if(insert_order($db, $user_id) 
+    && insert_detail($db, $carts['item_id'], $carts['amount'],$carts['price'])){
+    $db->commit();
+    return true;
+  }
+  // 上記失敗した場合ロールバック、falseを返す
+  $db->rollback();
+  return false;
+  
+}
+
+// ordersテーブルに新しい購入明細を追加
+function insert_order($db, $user_id){
+  $sql = "
+    INSERT INTO
+      orders(
+          user_id
+      )
+    VALUES(:user_id)
+    ";
+
+    $params = array(':user_id' => $user_id);
+    return execute_query($db, $sql, $params);
+}
+
+// ？？detailsテーブルに入れるorder_idを取得したいが、取得方法がわからない
+function get_order_id($db, $now_date){
+  $sql = "
+    SELECT
+      order_id
+    FROM
+      order
+    WHERE
+      created = :now_date
+    ";
+
+    $params = array(':now_date' => $now_date);
+    return execute_query($db, $sql, $params);
+}
+
+// detailsテーブルに新しい購入明細を追加
+function insert_detail($db, $item_id, $amount, $price_bought){
+  $now_date = date('Y-m-d H:i:s');
+  $order_id = get_order_id($db, $now_date);
+  $sql = "
+    INSERT INTO
+      details(
+          order_id,
+          item_id,
+          amount,
+          price_bought
+      )
+    VALUES(:order_id, :item_id, :amount, :price_bougt)
+    ";
+
+    $params = array(':order_id' => $order_id, ':item_id' => $item_id, ':amount' => $amount, ':price_bougt' => $price_bought);
+    return execute_query($db, $sql, $params);
+}
