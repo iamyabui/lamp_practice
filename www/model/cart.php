@@ -147,14 +147,17 @@ function purchase_carts($db, $carts){
   }
 
   // 履歴画面、明細画面にデータをテーブルに挿入
-  regist_order_transaction($db, $carts[0]['user_id'], $carts);
+  if(regist_order_transaction($db, $carts[0]['user_id'], $carts) === false){
+    $db->rollback();
+    return false;
+  };
   // カート内を削除
   if(delete_user_carts($db, $carts[0]['user_id']) === false){
     $db->rollback();
     return false;
   };
-$db->commit();
-return true;
+  $db->commit();
+  return true;
 }
 
 function delete_user_carts($db, $user_id){
