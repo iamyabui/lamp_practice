@@ -109,6 +109,7 @@ function is_valid_password($password, $password_confirmation){
   }
   return $is_valid;
 }
+
 // usersテーブルに新規ユーザ情報を登録
 function insert_user($db, $name, $password){
   $sql = "
@@ -120,4 +121,3 @@ function insert_user($db, $name, $password){
   $params = array(':name' => $name, ':password' => $password);
   return execute_query($db, $sql, $params);
 }
-

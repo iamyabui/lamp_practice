@@ -23,8 +23,11 @@ if(is_logined() === false){
 
 $db = get_db_connect();
 $user = get_login_user($db);
-
+// ログインユーザのカート情報を渡す
 $carts = get_user_carts($db, $user['user_id']);
+// ログインユーザのカート内合計金額を計算
+$total_price = sum_carts($carts);
+
 // 在庫からカート内商品購入数を引いて、itemsテーブルの在庫数を更新
 if(purchase_carts($db, $carts) === false){
   set_error('商品が購入できませんでした。');
