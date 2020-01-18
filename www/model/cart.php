@@ -1,6 +1,8 @@
 <?php 
-require_once 'functions.php';
-require_once 'db.php';
+require_once MODEL_PATH . 'functions.php';
+require_once MODEL_PATH . 'db.php';
+require_once MODEL_PATH . 'detail.php';
+require_once MODEL_PATH . 'order.php';
 
 // 該当ユーザのカートにおける各商品に対する以下情報を取得
 // （商品ID、商品名、値段、在庫、ステータス、画像、カートID、ユーザID、購入予定数）
@@ -122,12 +124,14 @@ function delete_cart($db, $cart_id){
   $params = array(':cart_id' => $cart_id);
   return execute_query($db, $sql, $params);
 }
-// 在庫からカート内商品購入数を引いて、itemsテーブルの在庫数を更新
+// 在庫からカート内商品購入数を引いて、itemsテーブルの在庫数を更新⇛履歴画面、明細画面にデータをテーブルに挿入⇛カート内削除
 function purchase_carts($db, $carts){
   // カート内商品の有無、商品表示ステータスチェック、在庫数チェックを実施、一つでもNGの場合false
   if(validate_cart_purchase($carts) === false){
     return false;
   }
+
+  $db->beginTransaction();
   // カート内商品分繰り返す
   foreach($carts as $cart){
     // カート内商品について、在庫から購入数を引いた数を、itemsテーブルの在庫数に更新
@@ -137,10 +141,20 @@ function purchase_carts($db, $carts){
         $cart['stock'] - $cart['amount']
       ) === false){
       set_error($cart['name'] . 'の購入に失敗しました。');
+      $db->rollback();
+      return false;
     }
   }
-  
-  delete_user_carts($db, $carts[0]['user_id']);
+
+  // 履歴画面、明細画面にデータをテーブルに挿入
+  regist_order_transaction($db, $carts[0]['user_id'], $carts);
+  // カート内を削除
+  if(delete_user_carts($db, $carts[0]['user_id']) === false){
+    $db->rollback();
+    return false;
+  };
+$db->commit();
+return true;
 }
 
 function delete_user_carts($db, $user_id){
