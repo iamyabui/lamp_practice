@@ -24,3 +24,43 @@ function regist_order_transaction($db, $user_id, $carts){
   }
   return true;
 }
+
+// 以下はmodel/order.phpに追加
+function sum_orders($db, $order_id){
+    $details =  get_user_details($db, $order_id);
+    $total_price = 0;
+    foreach($details as $detail){
+        $total_price += $detail['price_bought'] * $detail['amount'];
+    }
+    return $total_price;
+}
+
+// 以下はmodel/order.phpに追加
+function get_user_orders($db, $user){
+    $sql = "
+    SELECT
+        order_id,
+        created
+    FROM
+        orders
+    WHERE
+        user_id = :user_id
+    ORDER BY
+        created DESC
+    ";
+    $params = array(':user_id' => $user);
+    return  fetch_all_query($db, $sql, $params);
+}
+
+function get_admin_orders($db){
+    $sql = "
+    SELECT
+        order_id,
+        created
+    FROM
+        orders
+    ORDER BY
+        created DESC
+    ";
+    return fetch_all_query($db, $sql);
+}
