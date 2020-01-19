@@ -36,8 +36,10 @@ $orders = get_order($db, $order_id);
 // order_idの合計金額を計算
 $total_price =  sum_orders($db, $order_id);
 
-if($orders['user_id'] !== $user['user_id']){
-  redirect_to(ORDER_URL);
+if(is_admin($user) === false){
+  if($orders['user_id'] !== $user['user_id']){
+    redirect_to(ORDER_URL);
+  }
 }
 
 header('X-FRAME-OPTIONS: DENY');

@@ -25,7 +25,7 @@ function regist_order_transaction($db, $user_id, $carts){
   return true;
 }
 
-// 以下はmodel/order.phpに追加
+// order_id毎の合計金額を計算、取得
 function sum_orders($db, $order_id){
     $details =  get_user_details($db, $order_id);
     $total_price = 0;
@@ -35,7 +35,7 @@ function sum_orders($db, $order_id){
     return $total_price;
 }
 
-// 以下はmodel/order.phpに追加
+// ordersテーブルからユーザ毎の履歴情報取得
 function get_user_orders($db, $user){
     $sql = "
     SELECT
@@ -45,11 +45,14 @@ function get_user_orders($db, $user){
         orders
     WHERE
         user_id = :user_id
+    ORDER BY
+        created DESC
     ";
     $params = array(':user_id' => $user);
     return  fetch_all_query($db, $sql, $params);
 }
 
+// ordersテーブルから全ユーザの履歴情報取得
 function get_admin_orders($db){
     $sql = "
     SELECT
@@ -57,6 +60,8 @@ function get_admin_orders($db){
         created
     FROM
         orders
+    ORDER BY
+        created DESC
     ";
     return fetch_all_query($db, $sql);
 }

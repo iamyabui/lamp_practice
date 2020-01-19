@@ -29,7 +29,7 @@ function insert_detail($db, $item_id, $amount, $price_bought, $order_id){
       return execute_query($db, $sql, $params);
   }
   
-  // 以下はmodel/detail.phpに追加
+  // detailsテーブルから履歴情報の取得
 function get_user_details($db, $order_id){
   $sql = "
   SELECT
@@ -52,6 +52,7 @@ function get_user_details($db, $order_id){
   return  fetch_all_query($db, $sql, $params);
 }
 
+// orderテーブルから該当order_idのユーザIDを取得
 function get_order($db, $order_id){
   $sql = "
   SELECT
