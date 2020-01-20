@@ -35,32 +35,49 @@ function sum_orders($db, $order_id){
     return $total_price;
 }
 
-// 以下はmodel/order.phpに追加
+// ユーザの履歴情報を取得
 function get_user_orders($db, $user){
     $sql = "
     SELECT
-        order_id,
-        created
+        orders.order_id,
+        orders.created,
+        SUM(details.price_bought * details.amount) AS price_sum
     FROM
         orders
-    WHERE
-        user_id = :user_id
+     INNER JOIN
+     	details
+     ON orders.order_id = details.order_id
+     ";
+    
+    $params = array();
+
+     if (is_admin($user) === false){
+        $sql .= "
+        WHERE
+        user_id = :user_id";
+        $params[':user_id'] = $user['user_id'];
+    }
+    
+    $sql .= "
+    GROUP BY
+    	orders.order_id
     ORDER BY
-        created DESC
+        orders.created DESC
     ";
-    $params = array(':user_id' => $user);
-    return  fetch_all_query($db, $sql, $params);
+    
+    return fetch_all_query($db, $sql, $params);
 }
 
-function get_admin_orders($db){
+function get_order($db, $order_id){
     $sql = "
     SELECT
-        order_id,
-        created
+      created,
+      user_id
     FROM
-        orders
-    ORDER BY
-        created DESC
-    ";
-    return fetch_all_query($db, $sql);
-}
+      orders
+    WHERE
+      order_id = :order_id
+  ";
+    $params = array(':order_id' => $order_id);
+    return  fetch_query($db, $sql, $params);
+  }

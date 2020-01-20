@@ -8,7 +8,7 @@ require_once MODEL_PATH . 'item.php';
 
 session_start();
 //order.phpで作成されたトークンをindex_view.php経由で取得
-$token = get_post('token');
+$token = get_get('token');
 //cart_view.phpのpostで受け取ったトークンと、cart.phpで取得したトークンの照合が失敗した場合
 if(is_valid_csrf_token($token) === false){
   // セッションにエラーメッセージを渡す
@@ -28,16 +28,16 @@ $db = get_db_connect();
 $user = get_login_user($db);
 
 // post処理でorder_idを取得
-$order_id = get_post('order_id');
+$order_id = get_get('order_id');
 // 該当のorder_idについてdetailsテーブルから明細を取得
 $details = get_user_details($db, $order_id);
 // order_idの購入日時とuser_idを配列で取得
-$orders = get_order($db, $order_id);
+$order = get_order($db, $order_id);
 // order_idの合計金額を計算
 $total_price =  sum_orders($db, $order_id);
 
 if(is_admin($user) === false){
-  if($orders['user_id'] !== $user['user_id']){
+  if($order['user_id'] !== $user['user_id']){
     redirect_to(ORDER_URL);
   }
 }

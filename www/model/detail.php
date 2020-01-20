@@ -51,17 +51,3 @@ function get_user_details($db, $order_id){
   $params = array(':order_id' => $order_id);
   return  fetch_all_query($db, $sql, $params);
 }
-
-function get_order($db, $order_id){
-  $sql = "
-  SELECT
-    created,
-    user_id
-  FROM
-    orders
-  WHERE
-    order_id = :order_id
-";
-  $params = array(':order_id' => $order_id);
-  return  fetch_query($db, $sql, $params);
-}

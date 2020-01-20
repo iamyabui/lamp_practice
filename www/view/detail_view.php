@@ -14,7 +14,7 @@
     <h1>購入明細画面</h1>
     <div>
         <p>注文番号：<?php print(h($order_id));?></p>
-        <p>購入日時：<?php print($orders['created']);?></p>
+        <p>購入日時：<?php print($order['created']);?></p>
         <p>合計金額：<?php print(h($total_price));?></p>
     </div>
 

@@ -13,7 +13,7 @@
   <div class="container">
     <h1>購入履歴画面</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
-      <?php if(count($orders) > 0){ ?>
+    <?php if(count($orders) > 0){ ?>
       <table class="table table-bordered text-center">
         <thead class="thead-light">
           <tr>
@@ -28,9 +28,9 @@
           <tr>
             <td><?php print(h($order['order_id']));?></td>
             <td><?php print(h($order['created'])); ?></td>
-            <td><?php print(h(sum_orders($db, $order['order_id']))); ?>円</td>
+            <td><?php print(h(number_format($order['price_sum']))); ?>円</td>
             <td>
-              <form method="post" action="detail.php">
+              <form method="get" action="detail.php">
                 <input type="submit" value="明細" class="btn btn-secondary">
                 <input type="hidden" name="order_id" value="<?php print(h($order['order_id'])); ?>">
                 <input type="hidden" name="token" value="<?php print(h($token)); ?>">
