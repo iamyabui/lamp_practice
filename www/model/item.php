@@ -100,7 +100,13 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
     VALUES(:name, :price, :stock, :filename, :status_value);
   ";
 
-  $params = array(':name' => $name, ':price' => $price, ':stock' => $stock, ':filename' => $filename, '$status_value' => $status_value);
+  $params = array(
+    ':name' => $name, 
+    ':price' => $price, 
+    ':stock' => $stock, 
+    ':filename' => $filename, 
+    ':status_value' => $status_value
+  );
   return execute_query($db, $sql, $params);
 }
 // 商品表示ステータスの変更
