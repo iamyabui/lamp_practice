@@ -24,7 +24,7 @@ function get_item($db, $item_id){
 }
 
 // itemsテーブルから商品情報を取得、デフォルトで$is_openにfalseを渡す
-function get_items($db, $is_open = false){
+function get_items($db, $is_open = false, $sort = "new"){
   //$is_openがデフォルト値と同様falseの場合、全てのitem情報を取得する。
   $sql = '
     SELECT
@@ -33,10 +33,12 @@ function get_items($db, $is_open = false){
       stock,
       price,
       image,
-      status
+      status,
+      created
     FROM
       items
   ';
+
   //$is_openがtrueの場合、表示OK（status=1)のitem情報のみ取得する。
   if($is_open === true){
     $sql .= '
@@ -44,6 +46,23 @@ function get_items($db, $is_open = false){
     ';
   }
 
+  if($sort === "new"){
+    $sql .= "
+      ORDER BY
+        created DESC
+        ";
+  } else if($sort === "cheap"){
+    $sql .= "
+      ORDER BY
+        price ASC
+      ";
+  } else if($sort === "expen"){
+    $sql .= "
+      ORDER BY
+        price DESC
+      ";
+  }
+  
   return fetch_all_query($db, $sql);
 }
 
@@ -53,9 +72,9 @@ function get_all_items($db){
 }
 
 // 表示OK（status=1）の商品情報のみ取得
-function get_open_items($db){
+function get_open_items($db, $sort){
   //$is_openにtrueを代入して、get_items関数を実行
-  return get_items($db, true);
+  return get_items($db, true, $sort);
 }
 
 // 入力フォームで入力した情報が正常に登録できた場合、trueを返す
