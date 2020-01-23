@@ -17,3 +17,5 @@ CREATE TABLE `sample`.`details` (
     PRIMARY KEY (`detail_id`)
     ) ENGINE = InnoDB;
 
+ALTER TABLE `details` ADD INDEX(`item_id`);
+ALTER TABLE `details` ADD FOREIGN KEY (`item_id`) REFERENCES `items`(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
