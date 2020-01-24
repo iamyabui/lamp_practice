@@ -18,9 +18,9 @@
     <div class="text-right">
       <form action="index.php" method="get">
         <select name="sort">
-          <option value="new">新着順</option>
-          <option value="cheap">価格が安い順</option>
-          <option value="expen">価格が高い順</option>
+          <option value="new" <?php if ($sort === 'new') {print h('selected');}; ?>>新着順</option>
+          <option value="cheap" <?php if ($sort === 'cheap') {print h('selected');}; ?>>価格が安い順</option>
+          <option value="expensive" <?php if ($sort === 'expensive') {print h('selected');}; ?>>価格が高い順</option>
         </select>
         <input type="submit" value="並び替え">
       </form> 

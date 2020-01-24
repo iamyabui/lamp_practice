@@ -14,14 +14,7 @@ if(is_logined() === false){
 }
 
 // 並び替え
-$sort = get_get("sort");
-if($sort === ''){
-  $sort = "new";
-}
-
-if($sort === "new"){
-
-}
+$sort = get_get('sort', 'new');
 
 $db = get_db_connect();
 // ログインユーザの情報を取得

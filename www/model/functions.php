@@ -10,19 +10,21 @@ function redirect_to($url){
   exit;
 }
 
-function get_get($name){
+function get_get($name, $default = ''){
+  // $_GETに$nameで渡したキーが存在する場合、値を返す
+  // 存在しない場合は、第2引数を返す
   if(isset($_GET[$name]) === true){
     return $_GET[$name];
   };
-  return '';
+  return $default;
 }
 
 // xxx_view.phpでpostされた値を返す、空の場合空文字を返す
-function get_post($name){
+function get_post($name, $default = ''){
   if(isset($_POST[$name]) === true){
     return $_POST[$name];
   };
-  return '';
+  return $default;
 }
 
 function get_file($name){
