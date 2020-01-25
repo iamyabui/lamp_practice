@@ -13,11 +13,14 @@ if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
 
+// 並び替え
+$sort = get_get('sort', 'new');
+
 $db = get_db_connect();
 // ログインユーザの情報を取得
 $user = get_login_user($db);
 // 表示OKの商品情報のみ取得
-$items = get_open_items($db);
+$items = get_open_items($db, $sort);
 
  // クリックジャッキング対策
  header('X-FRAME-OPTIONS: DENY');
